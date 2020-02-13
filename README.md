@@ -1,2 +1,2 @@
 # landing-page
-Landing page project for Udactiy Front End Nano Degree
+Landing Page project for Udactiy Nano Degree
