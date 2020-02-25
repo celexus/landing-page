@@ -1,30 +1,30 @@
 /**
- * 
+ *
  * Manipulating the DOM exercise.
  * Exercise programmatically builds navigation,
  * scrolls to anchors from navigation,
  * and highlights section in viewport upon scrolling.
- * 
+ *
  * Dependencies: None
- * 
+ *
  * JS Version: ES2015/ES6
- * 
+ *
  * JS Standard: ESlint
- * 
-*/
+ *
+ */
+
+const btnGoToTop = document.getElementById("btnTop");
+
+function getElementPosition(section){
+    let elemPosition = section.getBoundingClientRect();
+    return elemPosition;
+}
+
 
 /**
- * Define Global Variables
- * 
-*/
-
-
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
-// https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
+ * Credit:
+ * https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
+ */
 function isSectionInViewport(section){
     let elemPosition = getElementPosition(section);
 
@@ -38,13 +38,8 @@ function isSectionInViewport(section){
     }
 }
 
-function getElementPosition(section){
-    let elemPosition = section.getBoundingClientRect();
-    return elemPosition;
-}
 
 function collectNavData(){
-
     const allSections = document.querySelectorAll('section');
     let navArr = [];
 
@@ -57,14 +52,10 @@ function collectNavData(){
     return navArr;
 }
 
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
 
-
-// build the nav
+/*
+ * build the nav
+  */
 function buildMainNav(){
 
     const navArr = collectNavData();
@@ -85,22 +76,15 @@ function buildMainNav(){
     navBarList.addEventListener('click', navLinkClick);
     navBarList.appendChild(navFragment);
 }
-// Add class 'active' to section when near top of viewport
 
-
-// Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- * 
+/*
+ * Build menu
 */
-
-// Build menu
 buildMainNav();
 
-// Scroll to section on link click
+/*
+ * Scroll to section on link click
+*/
 function navLinkClick(e){
     e.preventDefault();
 
@@ -109,21 +93,13 @@ function navLinkClick(e){
 
     selectedSection.scrollIntoView(true);
 
-    // Use scrollTo method to scroll to selected section
-    //let elemPosition = getElementPosition(selectedSection);
-    //console.log(elemPosition);
-    // setTimeout(function () {window.scrollTo({
-    //     //left: elemPosition.left,
-    //     top: elemPosition.top,
-    //     behavior: 'smooth'
-    // });
-    // },2);
-
     toggleSectionActiveState();
-
 }
 
-// Set sections as active
+
+/*
+ * set in view section as active
+*/
 function toggleSectionActiveState(){
     const allSections = document.querySelectorAll('section');
 
@@ -132,26 +108,49 @@ function toggleSectionActiveState(){
             aSection.classList.add('active-section');
             toggleNavActiveState(aSection);
         }else{
-           aSection.classList.remove('active-section');
+            aSection.classList.remove('active-section');
         }
     }
 }
 
+
+/*
+ * set relevant nav item as active
+*/
 function toggleNavActiveState(aSection){
     const navBarList = document.getElementById('navbar__list');
     const navBarLinks = navBarList.querySelectorAll('a');
 
     for(navLink of navBarLinks){
-        if(navLink.getAttribute('href')== aSection.id){
+        if(navLink.getAttribute('href') == aSection.id){
             navLink.classList.add('active');
         }else {
             navLink.classList.remove('active');
         }
     }
-
 }
 
 
-window.addEventListener('scroll', function (event) {
-   toggleSectionActiveState();
+/*
+ * show / hide scroll to top button
+*/
+function toggleScrollToTopButton(){
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        btnGoToTop.style.display = "block";
+    } else {
+        btnGoToTop.style.display = "none";
+    }
+}
+
+
+window.addEventListener('scroll', function (){
+    toggleSectionActiveState();
+    toggleScrollToTopButton();
 }, false);
+
+
+btnGoToTop.addEventListener('click', function (e){
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    toggleSectionActiveState();
+});
