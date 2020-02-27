@@ -13,7 +13,8 @@
  *
  */
 
-const btnGoToTop = document.getElementById("btnTop");
+let btnGoToTop = '';
+btnGoToTop = document.getElementById("btnTop");
 
 function getElementPosition(section){
     let elemPosition = section.getBoundingClientRect();
@@ -43,7 +44,7 @@ function collectNavData(){
     const allSections = document.querySelectorAll('section');
     let navArr = [];
 
-    for (const aSection of allSections){
+    for (let aSection of allSections){
         const navObj = new Object();
         navObj.id = aSection.getAttribute('id');
         navObj.title = aSection.getAttribute('data-nav');
