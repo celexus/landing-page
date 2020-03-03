@@ -11,7 +11,7 @@ The dynamic menu items will appear in the top right hand corner.
 
 Click on the menu items to navigate through the page or alternatively use the mouse to scroll down the page. 
 
-The background color of the active section will change to highlight the section being viewed. 
+The color of the heading of the active section will change to yellow to indicate which section is being viewed. 
 
 To navigate back to the top of the page, click on the arrow in the bottom right hand corner of the screen.  
 
