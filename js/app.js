@@ -16,17 +16,13 @@
 let btnGoToTop = '';
 btnGoToTop = document.getElementById("btnTop");
 
-function getElementPosition(section){
+function getElementPosition(section) {
     let elemPosition = section.getBoundingClientRect();
     return elemPosition;
 }
 
 
-/**
- * Credit:
- * https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
- */
-function isSectionInViewport(section){
+function isSectionInViewport(section) {
     let elemPosition = getElementPosition(section);
 
     if (elemPosition.top >= 0 &&
@@ -40,11 +36,11 @@ function isSectionInViewport(section){
 }
 
 
-function collectNavData(){
+function collectNavData() {
     const allSections = document.querySelectorAll('section');
     let navArr = [];
 
-    for (let aSection of allSections){
+    for (let aSection of allSections) {
         const navObj = new Object();
         navObj.id = aSection.getAttribute('id');
         navObj.title = aSection.getAttribute('data-nav');
@@ -57,16 +53,16 @@ function collectNavData(){
 /*
  * build the nav
   */
-function buildMainNav(){
+function buildMainNav() {
 
     const navArr = collectNavData();
     let navFragment = new DocumentFragment();
 
-    for (let i = 0; i < navArr.length; i++){
+    for (let i = 0; i < navArr.length; i++) {
         let listItem = document.createElement('li');
         let listLink = document.createElement('a');
 
-        i == 0 ? listLink.classList.add('menu__link','active') : listLink.classList.add('menu__link');
+        i == 0 ? listLink.classList.add('menu__link', 'active') : listLink.classList.add('menu__link');
         listLink.textContent = navArr[i].title;
         listLink.setAttribute('href', navArr[i].id);
         listItem.appendChild(listLink);
@@ -86,29 +82,36 @@ buildMainNav();
 /*
  * Scroll to section on link click
 */
-function navLinkClick(e){
+function navLinkClick(e) {
     e.preventDefault();
 
     let selectedId = e.target.getAttribute('href');
     let selectedSection = document.getElementById(selectedId);
+    const allSections = document.querySelectorAll('section');
 
+    toggleNavActiveState(selectedSection);
+
+    for (aSection of allSections) {
+        aSection.classList.remove('active-section');
+    }
+
+    e.target.classList.add('active');
     selectedSection.scrollIntoView(true);
-
-    toggleSectionActiveState();
+    selectedSection.classList.add('active-section');
 }
 
 
 /*
  * set in view section as active
 */
-function toggleSectionActiveState(){
+function toggleSectionActiveState() {
     const allSections = document.querySelectorAll('section');
 
-    for(aSection of allSections){
-        if(isSectionInViewport(aSection)) {
+    for (aSection of allSections) {
+        if (isSectionInViewport(aSection)) {
             aSection.classList.add('active-section');
             toggleNavActiveState(aSection);
-        }else{
+        } else {
             aSection.classList.remove('active-section');
         }
     }
@@ -118,14 +121,14 @@ function toggleSectionActiveState(){
 /*
  * set relevant nav item as active
 */
-function toggleNavActiveState(aSection){
+function toggleNavActiveState(aSection) {
     const navBarList = document.getElementById('navbar__list');
     const navBarLinks = navBarList.querySelectorAll('a');
 
-    for(navLink of navBarLinks){
-        if(navLink.getAttribute('href') == aSection.id){
+    for (navLink of navBarLinks) {
+        if (navLink.getAttribute('href') == aSection.id) {
             navLink.classList.add('active');
-        }else {
+        } else {
             navLink.classList.remove('active');
         }
     }
@@ -135,7 +138,7 @@ function toggleNavActiveState(aSection){
 /*
  * show / hide scroll to top button
 */
-function toggleScrollToTopButton(){
+function toggleScrollToTopButton() {
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         btnGoToTop.style.display = "block";
     } else {
@@ -144,14 +147,24 @@ function toggleScrollToTopButton(){
 }
 
 
-window.addEventListener('scroll', function (){
+window.addEventListener('scroll', function () {
     toggleSectionActiveState();
     toggleScrollToTopButton();
 }, false);
 
 
-btnGoToTop.addEventListener('click', function (e){
+btnGoToTop.addEventListener('click', function (e) {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    toggleSectionActiveState();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    const allSections = document.querySelectorAll('section');
+    const firstSection = document.getElementById('section1');
+
+    toggleNavActiveState(firstSection);
+
+    for (aSection of allSections) {
+        aSection.classList.remove('active-section');
+    }
+
+    firstSection.classList.add('active-section');
 });
